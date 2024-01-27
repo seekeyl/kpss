@@ -1,0 +1,13 @@
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/.kpss/db;MODE=MYSQL;
+    #url: jdbc:h2:file:D:/Dev/workspaces/h2/kpss;MODE=MYSQL;
+#mybatis-plus:
+  #configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+mpe:
+  auto-table:
+    mode: update
