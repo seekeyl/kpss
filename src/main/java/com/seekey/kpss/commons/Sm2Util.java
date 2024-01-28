@@ -18,11 +18,24 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * SM2加解密工具类
+ */
 @Slf4j
 public class Sm2Util {
+
     static {
+        // 加入BouncyCastleProvider支持
         Security.addProvider(new BouncyCastleProvider());
     }
+
+    /**
+     * SM2加密
+     *
+     * @param publicKeyStr 公钥
+     * @param data         待加密数据
+     * @return 加密后的数据
+     */
     public static String encrypt(String publicKeyStr, String data) {
         PublicKey publicKey = null;
 
@@ -62,6 +75,13 @@ public class Sm2Util {
         return ecPublicKeyParameters;
     }
 
+    /**
+     * SM2解密
+     *
+     * @param privateKeyStr 私钥
+     * @param cipherData    待解密数据
+     * @return 解密后的数据
+     */
     public static String decrypt(String privateKeyStr, String cipherData) {
         SM2Engine sm2Engine = getSm2Engine(privateKeyStr);
         String result = null;
@@ -80,6 +100,11 @@ public class Sm2Util {
         return result;
     }
 
+    /**
+     * 生成随机SM2密钥对
+     *
+     * @return 密钥对
+     */
     public static KeyPair generateSm2KeyPair() {
         return SecureUtil.generateKeyPair("sm2");
     }
@@ -101,26 +126,7 @@ public class Sm2Util {
         System.out.println("encryptCode: " + encrypt);
         System.out.println("decryptCode: " + decrypt(privateKey, encrypt));
 
-        encrypt = "BHqjn2NM94hOyGYUomKIEkIYKpywnraHSmqZFIV0bPEKFpCwuxjCxeWbvxg9v7Y5MF+T6Wp9PoVyAoqjjyuE/j+7+62f7LwUdd1VUQN1QTrQAFc21o2WRiyAsNO6bC/aEUOFO7iPnmzV";
-        privateKey = "MIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQg7Nl2Z8/myJ443ZHNJrtHQX8riq4mCAMf5BerALBxfLqgCgYIKoEcz1UBgi2hRANCAAT3h3McvlN5+9vjOACpBZVVmvx4mrYkvmZol5RSRn8jOB3ARw+kF/rn+BZBhHFSVZ54x+NnllmJdVRJ6t6DqxgP";
-        String decrypt = decrypt(privateKey, encrypt);
-        System.out.println("解密后数据：" + decrypt);
     }
-
-    /*
-    public static byte[] decryptBytes(String privateKeyStr, byte[] in) {
-        SM2Engine sm2Engine = getSm2Engine(privateKeyStr);
-        byte[] arrayOfBytes = null;
-        try {
-            if (sm2Engine != null) {
-                arrayOfBytes = sm2Engine.processBlock(in, 0, in.length);
-            }
-        } catch (Exception e) {
-            log.warn("SM2解密时出现异常：{}", e.getMessage());
-        }
-        return arrayOfBytes;
-    }
-    */
 
     private static SM2Engine getSm2Engine(String privateKeyStr) {
         PrivateKey privateKey = null;

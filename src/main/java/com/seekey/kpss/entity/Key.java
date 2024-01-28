@@ -8,6 +8,10 @@ import com.tangzc.mpe.autotable.annotation.Table;
 import lombok.Data;
 
 import java.util.Date;
+
+/**
+ * 密码表
+ */
 @AutoMapper
 @Data
 @Table(value = "tb_keys", comment = "密码表")

@@ -50,14 +50,6 @@ public class MainPanel {
         this.dataHelper = dataHelper;
 
         uptbtn.addActionListener(e -> {
-            /*
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int result = fileChooser.showOpenDialog(panel);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                path.setText(fileChooser.getSelectedFile().getAbsolutePath());
-            }
-             */
             saveKey();
         });
 
@@ -73,126 +65,11 @@ public class MainPanel {
             // System.out.println(JSON.toJSONString(group));
         });
 
-        list1.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    addGroupMenu(e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    addGroupMenu(e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    addGroupMenu(e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    addGroupMenu(e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    addGroupMenu(e.getX(), e.getY());
-                }
-            }
-        });
-
-        table.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    int row = table.getSelectedRow();
-                    if (keys != null && row < keys.size()) {
-                        setKey();
-                    }
-                }else if (e.getButton() == MouseEvent.BUTTON3) {
-                    addKeyMenu(e.getX(), e.getY());
-                }
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
+        list1.addMouseListener(new textListener());
+        table.addMouseListener(new textListener());
 
         btn0.addActionListener(e -> {
-            JOptionPane pane = new JOptionPane("修改密码", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-            Box hbox0 = Box.createHorizontalBox();
-            JLabel cpassLabel = new JLabel("当前密码");
-            hbox0.add(cpassLabel);
-            JPasswordField cpassBox = new JPasswordField();
-            hbox0.add(cpassBox);
-            pane.add(hbox0, 1);
-
-            Box hbox1 = Box.createHorizontalBox();
-            JLabel npassLabel = new JLabel("新的密码");
-            hbox1.add(npassLabel);
-            JPasswordField npassBox = new JPasswordField();
-            hbox1.add(npassBox);
-            pane.add(hbox1, 2);
-
-            Box hbox2 = Box.createHorizontalBox();
-            JLabel fpassLabel = new JLabel("确认密码");
-            hbox2.add(fpassLabel);
-            JPasswordField fpassBox = new JPasswordField();
-            hbox2.add(fpassBox);
-            pane.add(hbox2, 3);
-
-            JDialog dialog = pane.createDialog("密码校验");
-            dialog.setVisible(true);
-
-            switch ((Integer) pane.getValue()) {
-                case JOptionPane.OK_OPTION:
-                    String cpass = new String(cpassBox.getPassword());
-                    String npass = new String(npassBox.getPassword());
-                    String fpass = new String(fpassBox.getPassword());
-                    Secret secret = dataHelper.getSecret();
-                    if (!DigestUtil.md5Hex(cpass).equals(secret.getPassword())) {
-                        JOptionPane.showMessageDialog(panel, "当前密码错误");
-                        return;
-                    }
-                    if (!npass.equals(fpass)) {
-                        JOptionPane.showMessageDialog(panel, "两次密码不一致");
-                        return;
-                    }
-                    dataHelper.updatePassword(npass);
-                    JOptionPane.showMessageDialog(panel, "密码修改成功");
-                    break;
-                case JOptionPane.CANCEL_OPTION:
-                    System.out.println("CANCEL");
-                    break;
-            }
-            dialog.dispose();
+            changePassword();
         });
 
         btn1.addActionListener(e -> {
@@ -238,12 +115,70 @@ public class MainPanel {
         setPage();
     }
 
+    /**
+     * 修改读取密码
+     */
+    private void changePassword() {
+        JOptionPane pane = new JOptionPane("修改密码", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        Box hbox0 = Box.createHorizontalBox();
+        JLabel cpassLabel = new JLabel("当前密码");
+        hbox0.add(cpassLabel);
+        JPasswordField cpassBox = new JPasswordField();
+        hbox0.add(cpassBox);
+        pane.add(hbox0, 1);
+
+        Box hbox1 = Box.createHorizontalBox();
+        JLabel npassLabel = new JLabel("新的密码");
+        hbox1.add(npassLabel);
+        JPasswordField npassBox = new JPasswordField();
+        hbox1.add(npassBox);
+        pane.add(hbox1, 2);
+
+        Box hbox2 = Box.createHorizontalBox();
+        JLabel fpassLabel = new JLabel("确认密码");
+        hbox2.add(fpassLabel);
+        JPasswordField fpassBox = new JPasswordField();
+        hbox2.add(fpassBox);
+        pane.add(hbox2, 3);
+
+        JDialog dialog = pane.createDialog("密码校验");
+        dialog.setVisible(true);
+
+        switch ((Integer) pane.getValue()) {
+            case JOptionPane.OK_OPTION:
+                String cpass = new String(cpassBox.getPassword());
+                String npass = new String(npassBox.getPassword());
+                String fpass = new String(fpassBox.getPassword());
+                Secret secret = dataHelper.getSecret();
+                if (!DigestUtil.md5Hex(cpass).equals(secret.getPassword())) {
+                    JOptionPane.showMessageDialog(panel, "当前密码错误");
+                    return;
+                }
+                if (!npass.equals(fpass)) {
+                    JOptionPane.showMessageDialog(panel, "两次密码不一致");
+                    return;
+                }
+                dataHelper.updatePassword(npass);
+                JOptionPane.showMessageDialog(panel, "密码修改成功");
+                break;
+            case JOptionPane.CANCEL_OPTION:
+                break;
+        }
+        dialog.dispose();
+    }
+
+    /**
+     * 设置页码与翻页按钮状态
+     */
     private void setPage() {
         prePage.setEnabled(pageNo > 1);
         nxtPage.setEnabled(keys.size() >= pageSize);
         pageLbl.setText("第" + pageNo + "页");
     }
 
+    /**
+     * 复制密码到剪贴板
+     */
     private void copyPassword() {
         Secret secret = dataHelper.getSecret();
         if (!DigestUtil.md5Hex("").equalsIgnoreCase(secret.getPassword())) {
@@ -267,12 +202,19 @@ public class MainPanel {
         tips.setText("密码已复制");
     }
 
+    /**
+     * 复制文本到剪贴板
+     * @param text 文本
+     */
     private void copy(String text) {
         StringSelection selection = new StringSelection(text);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, null);
     }
 
+    /**
+     * 获取加密信息
+     */
     private void getSecret() {
         Secret secret = dataHelper.getSecret();
         if (secret == null) {
@@ -282,6 +224,9 @@ public class MainPanel {
         privateKey = secret.getPrivateKey();
     }
 
+    /**
+     * 保存密钥
+     */
     private void saveKey() {
         Group group = groups.get(groupBox.getSelectedIndex());
 
@@ -289,7 +234,6 @@ public class MainPanel {
         if (!pwd.equals(oldPwd)) {
             pwd = Sm2Util.encrypt(publicKey, pwd);
         }
-
 
         Key key = new Key();
         key.setId(keyId);
@@ -299,13 +243,17 @@ public class MainPanel {
         key.setPassword(pwd);
         key.setUrl(urlBox.getText());
         key.setRemark(remarkBox.getText());
-        System.out.println(JSON.toJSONString(key));
 
         passwordBox.setText(pwd);
         dataHelper.modifyKey(key);
         refreshKeys();
+
+        JOptionPane.showMessageDialog(panel, "保存成功");
     }
 
+    /**
+     * 复制密钥信息到界面
+     */
     private void setKey() {
         Key key = keys.get(table.getSelectedRow());
         keyId = key.getId();
@@ -319,6 +267,9 @@ public class MainPanel {
         uptbtn.setEnabled(true);
     }
 
+    /**
+     * 刷新密钥列表
+     */
     private void refreshKeys() {
         uptbtn.setEnabled(false);
         //创建一维数组，存储标题
@@ -350,6 +301,9 @@ public class MainPanel {
         groupBox.setSelectedIndex(list1.getSelectedIndex());
     }
 
+    /**
+     * 刷新分组列表
+     */
     private void refreshGroups() {
         groups = dataHelper.getGroups();
         groupBox.removeAllItems();
@@ -361,6 +315,11 @@ public class MainPanel {
         list1.setListData(names);
     }
 
+    /**
+     * 添加密钥右键菜单
+     * @param x x坐标
+     * @param y y坐标
+     */
     private void addKeyMenu(int x, int y) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem item0 = new JMenuItem("新增");
@@ -377,6 +336,11 @@ public class MainPanel {
         popupMenu.show(table, x, y);
     }
 
+    /**
+     * 添加分组右键菜单
+     * @param x x坐标
+     * @param y y坐标
+     */
     private void addGroupMenu(int x, int y) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem item0 = new JMenuItem("新增");
@@ -393,6 +357,9 @@ public class MainPanel {
         popupMenu.show(list1, x, y);
     }
 
+    /**
+     * 设置新增密钥
+     */
     private void setAddKey() {
         keyId = null;
         groupBox.setSelectedIndex(list1.getSelectedIndex());
@@ -406,13 +373,24 @@ public class MainPanel {
         uptbtn.setEnabled(true);
     }
 
+    /**
+     * 删除密钥
+     */
     private void deleteKey() {
+        int confirm = JOptionPane.showConfirmDialog(panel, "是否确认删除");
+        if (confirm != 0) {
+            return;
+        }
+
         Key key = keys.get(table.getSelectedRow());
         dataHelper.deleteKeyById(key.getId());
         refreshKeys();
         setAddKey();
     }
 
+    /**
+     * 新增分组
+     */
     private void addGroup() {
         String name = JOptionPane.showInputDialog("请输入分组名称");
         if (name == null || name.isEmpty()) {
@@ -425,7 +403,15 @@ public class MainPanel {
         refreshGroups();
     }
 
+    /**
+     * 删除分组
+     */
     private void deleteGroup() {
+        int confirm = JOptionPane.showConfirmDialog(panel, "是否确认删除");
+        if (confirm != 0) {
+            return;
+        }
+
         int index = list1.getSelectedIndex();
         if (index < 0 || index >= groups.size()) {
             return;
@@ -435,21 +421,48 @@ public class MainPanel {
         refreshGroups();
     }
 
+    /**
+     * 鼠标事件监听
+     */
     class textListener implements MouseListener {
         @Override
         public void mouseClicked(MouseEvent e) {
+            Component component = e.getComponent();
+            // 如果是右键
             if (e.getButton() == MouseEvent.BUTTON3) {
-                Component component = e.getComponent();
+                // 如果是密码框，复制密码
                 if (component instanceof JPasswordField) {
                     copyPassword();
+                // 如果是文本框，复制文本
                 }else if (component instanceof JTextField) {
                     JTextField textField = (JTextField) component;
                     copy(textField.getText());
                     tips.setText(component.getName() + "已复制");
+                // 如果是文本域，复制文本
                 }else if (component instanceof JTextArea) {
                     JTextArea textArea = (JTextArea) component;
                     copy(textArea.getText());
                     tips.setText(component.getName() + "已复制");
+                // 如果是密钥列表，添加密钥菜单
+                }else if (component instanceof JTable) {
+                    addKeyMenu(e.getX(), e.getY());
+                // 如果是分组列表，添加分组菜单
+                } else if (component instanceof JList) {
+                    addGroupMenu(e.getX(), e.getY());
+                }
+            }
+            // 如果是左键
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                // 如果是密钥列表，设置密钥信息
+                if (component instanceof JTable){
+                    int row = table.getSelectedRow();
+                    if (keys != null && row < keys.size()) {
+                        setKey();
+                    }
+                // 如果是文本框，全选文本
+                }else if (component instanceof JTextField) {
+                    tips.setText(component.getName() + "已选中");
+                    ((JTextField) component).selectAll();
                 }
             }
         }

@@ -8,7 +8,9 @@ import com.tangzc.mpe.autotable.annotation.Table;
 import lombok.Data;
 
 import java.util.Date;
-
+/**
+ * 秘钥表
+ */
 @AutoMapper
 @Data
 @Table(value = "tb_secret", comment = "秘钥表")

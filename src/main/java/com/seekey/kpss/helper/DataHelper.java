@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,9 +31,11 @@ public class DataHelper {
         this.groupMapper = groupMapper;
         this.keyMapper = keyMapper;
         this.secretMapper = secretMapper;
-        initialzeDao.init();
     }
 
+    /**
+     * 初始化数据
+     */
     public void init() {
         initialzeDao.init();
 
@@ -43,7 +46,6 @@ public class DataHelper {
             group.setName("默认分组");
             groupMapper.insert(group);
         }
-        // keyMapper.selectList(null).forEach(System.out::println);
         Secret secret = secretMapper.selectById(1);
         if (secret == null) {
             secret = new Secret();
@@ -55,10 +57,21 @@ public class DataHelper {
         }
     }
 
+    /**
+     * 获取所有分组
+     * @return 分组列表
+     */
     public List<Group> getGroups() {
         return groupMapper.selectList(null);
     }
 
+    /**
+     * 获取分组下的所有密钥
+     * @param groupId 分组ID
+     * @param pageNo 页码
+     * @param size 每页大小
+     * @return 密钥列表
+     */
     public List<Key> getKeys(Integer groupId, Integer pageNo, Integer size) {
         Page<Key> page = new Page<>(pageNo, size);
 
@@ -68,39 +81,66 @@ public class DataHelper {
         return keyPage.getRecords();
     }
 
+    /**
+     * 更新密钥信息
+     * @param key 密钥
+     */
     public void modifyKey(Key key) {
         Integer id = key.getId();
         if (id == null) {
             keyMapper.insert(key);
         } else {
+            key.setUpdatedTime(new Date());
             keyMapper.updateById(key);
         }
     }
 
+    /**
+     * 删除密钥
+     * @param id 密钥ID
+     */
     public void deleteKeyById(Integer id) {
         keyMapper.deleteById(id);
     }
 
+    /**
+     * 更新分组信息
+     * @param group 分组
+     */
     public void modifyGroup(Group group) {
         Integer id = group.getId();
         if (id == null) {
             groupMapper.insert(group);
         } else {
+            group.setUpdatedTime(new Date());
             groupMapper.updateById(group);
         }
     }
 
+    /**
+     * 删除分组
+     * @param id 分组ID
+     */
     public void deleteGroupById(Integer id) {
         groupMapper.deleteById(id);
     }
 
+    /**
+     * 获取加密信息
+     * @return 密钥
+     */
     public Secret getSecret() {
         return secretMapper.selectById(1);
     }
 
+    /**
+     * 更新读取密码
+     * @param password 密码
+     */
     public void updatePassword(String password) {
         Secret secret = new Secret();
         secret.setId(1);
+        secret.setUpdatedTime(new Date());
         secret.setPassword(DigestUtil.md5Hex(password));
         secretMapper.updateById(secret);
 

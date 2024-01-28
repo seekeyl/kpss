@@ -9,6 +9,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 分组表
+ */
 @AutoMapper
 @Data
 @Table(value = "tb_groups", comment = "分组表")

@@ -2,9 +2,11 @@ package com.seekey.kpss.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+/*
+ * 用于初始化数据库
+ */
 @Component
 @Slf4j
 public class InitialzeDao {
