@@ -1,7 +1,6 @@
 package com.seekey.kpss.panels;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.alibaba.fastjson2.JSON;
 import com.seekey.kpss.commons.Sm2Util;
 import com.seekey.kpss.entity.Group;
 import com.seekey.kpss.entity.Key;
@@ -49,9 +48,7 @@ public class MainPanel {
     public MainPanel(DataHelper dataHelper) {
         this.dataHelper = dataHelper;
 
-        uptbtn.addActionListener(e -> {
-            saveKey();
-        });
+        uptbtn.addActionListener(e -> saveKey());
 
         list1.addListSelectionListener(e -> {
             int index = list1.getSelectedIndex();
@@ -68,17 +65,11 @@ public class MainPanel {
         list1.addMouseListener(new textListener());
         table.addMouseListener(new textListener());
 
-        btn0.addActionListener(e -> {
-            changePassword();
-        });
+        btn0.addActionListener(e -> changePassword());
 
-        btn1.addActionListener(e -> {
-            addGroup();
-        });
+        btn1.addActionListener(e -> addGroup());
 
-        btn2.addActionListener(e -> {
-            setAddKey();
-        });
+        btn2.addActionListener(e -> setAddKey());
 
         prePage.addActionListener(e -> {
             if (pageNo > 1) {
@@ -323,15 +314,11 @@ public class MainPanel {
     private void addKeyMenu(int x, int y) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem item0 = new JMenuItem("新增");
-        item0.addActionListener(e -> {
-            setAddKey();
-        });
+        item0.addActionListener(e -> setAddKey());
         popupMenu.add(item0);
 
         JMenuItem item1 = new JMenuItem("删除");
-        item1.addActionListener(e -> {
-            deleteKey();
-        });
+        item1.addActionListener(e -> deleteKey());
         popupMenu.add(item1);
         popupMenu.show(table, x, y);
     }
@@ -344,15 +331,11 @@ public class MainPanel {
     private void addGroupMenu(int x, int y) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem item0 = new JMenuItem("新增");
-        item0.addActionListener(e -> {
-            addGroup();
-        });
+        item0.addActionListener(e -> addGroup());
         popupMenu.add(item0);
 
         JMenuItem item1 = new JMenuItem("删除");
-        item1.addActionListener(e -> {
-            deleteGroup();
-        });
+        item1.addActionListener(e -> deleteGroup());
         popupMenu.add(item1);
         popupMenu.show(list1, x, y);
     }
