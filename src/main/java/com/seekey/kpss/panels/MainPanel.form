@@ -92,7 +92,7 @@
       <splitpane id="7b435">
         <constraints>
           <grid row="1" column="0" row-span="7" col-span="3" vsize-policy="3" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
+            <preferred-size width="200" height="100"/>
           </grid>
         </constraints>
         <properties/>
@@ -202,7 +202,7 @@
       <component id="894b9" class="javax.swing.JLabel">
         <constraints>
           <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false">
-            <preferred-size width="33" height="105"/>
+            <preferred-size width="33" height="55"/>
           </grid>
         </constraints>
         <properties>
@@ -211,8 +211,8 @@
       </component>
       <component id="f9811" class="javax.swing.JTextArea" binding="remarkBox">
         <constraints>
-          <grid row="7" column="4" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="2" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="105"/>
+          <grid row="7" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="55"/>
           </grid>
         </constraints>
         <properties/>

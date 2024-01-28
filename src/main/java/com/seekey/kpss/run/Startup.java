@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @Component
 @Slf4j
 public class Startup {
 
     private static final int WINDOW_WIDTH = 700;
-    private static final int WINDOW_HEIGHT = 380;
+    private static final int WINDOW_HEIGHT = 325;
     private final DataHelper dataHelper;
 
     @Autowired
@@ -36,6 +39,49 @@ public class Startup {
         frame.setLocation(20, 20);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setSystemTray(frame);
+    }
+
+    private void setSystemTray(JFrame frame) {
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon.jpg");
+
+            TrayIcon trayIcon = setPopup(frame, image);
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                log.error("Error while adding tray icon", e);
+            }
+
+            trayIcon.displayMessage("KPSS", "KPSS正在运行", TrayIcon.MessageType.INFO);
+            trayIcon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        frame.setVisible(true);
+                        frame.setState(Frame.NORMAL);
+                    }
+                }
+            });
+        }
+    }
+
+    private static TrayIcon setPopup(JFrame frame, Image image) {
+        PopupMenu popup = new PopupMenu();
+        MenuItem openItem = new MenuItem("Open KPSS");
+        openItem.addActionListener(e -> {
+            frame.setVisible(true);
+            frame.setState(Frame.NORMAL);
+        });
+        popup.add(openItem);
+        MenuItem exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(e -> System.exit(0));
+        popup.add(exitItem);
+
+        TrayIcon trayIcon = new TrayIcon(image, "KPSS", popup);
+        trayIcon.setImageAutoSize(true);
+        return trayIcon;
     }
 }
