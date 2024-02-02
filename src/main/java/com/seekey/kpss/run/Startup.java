@@ -43,11 +43,16 @@ public class Startup {
         setSystemTray(frame);
     }
 
+    /**
+     * 设置系统托盘
+     *
+     * @param frame 主窗口
+     */
     private void setSystemTray(JFrame frame) {
         if (SystemTray.isSupported()) {
             SystemTray tray = SystemTray.getSystemTray();
-            Image image = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon.jpg");
-
+            Image image = Toolkit.getDefaultToolkit().getImage("./images/icon.jpg");
+            System.out.println(image);
             TrayIcon trayIcon = setPopup(frame, image);
             try {
                 tray.add(trayIcon);
@@ -68,6 +73,13 @@ public class Startup {
         }
     }
 
+    /**
+     * 设置托盘弹出菜单
+     *
+     * @param frame 主窗口
+     * @param image 图标
+     * @return 托盘图标
+     */
     private static TrayIcon setPopup(JFrame frame, Image image) {
         PopupMenu popup = new PopupMenu();
         MenuItem openItem = new MenuItem("Open KPSS");
